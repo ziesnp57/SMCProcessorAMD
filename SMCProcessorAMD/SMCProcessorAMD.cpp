@@ -326,7 +326,7 @@ void SMCProcessorAMD::updateClockSpeed(){
     bool err = !read_msr(kMSR_HARDWARE_PSTATE_STATUS, &msr_value_buf);
     if(err) IOLog("SMCProcessorAMD::updateClockSpeed: failed somewhere");
             
-    IOLog("SMCProcessorAMD::updateClockSpeed: i am CPU %hhu, physical %hhu, %d\n", package, physical, msr_value_buf);
+    IOLog("SMCProcessorAMD::updateClockSpeed: i am CPU %hhu, physical %hhu, %llu\n", package, physical, msr_value_buf);
             
     MSR_HARDWARE_PSTATE_STATUS_perCore[physical] = msr_value_buf;
 }
