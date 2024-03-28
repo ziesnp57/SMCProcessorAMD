@@ -319,10 +319,23 @@ void SMCProcessorAMD::updateClockSpeed(){
     uint64_t msr_value_buf = 0;
     bool err = !read_msr(kMSR_HARDWARE_PSTATE_STATUS, &msr_value_buf);
     if(err) IOLog("SMCProcessorAMD::updateClockSpeed: failed somewhere");
+    
+    //Convert register value to clock speed.
+    uint32_t eax = (uint32_t)(msr_value_buf & 0xffffffff);
+    
+    // MSRC001_0293
+    // CurHwPstate [24:22]
+    // CurCpuVid [21:14]
+    // CurCpuDfsId [13:8]
+    // CurCpuFid [7:0]
+    float curCpuDfsId = (float)((eax >> 8) & 0x3f);
+    float curCpuFid = (float)(eax & 0xff);
+    
+    float clock = curCpuFid / curCpuDfsId * 200.0f;
 
-    IOLog("SMCProcessorAMD::updateClockSpeed: i am CPU %hhu, physical %hhu, %llu\n", package, physical, msr_value_buf);
-            
-    MSR_HARDWARE_PSTATE_STATUS_perCore[physical] = msr_value_buf;
+    IOLog("SMCProcessorAMD::updateClockSpeed: i am CPU %hhu, physical %hhu, %u\n", package, physical, clock);
+
+    MSR_HARDWARE_PSTATE_STATUS_perCore[physical] = clock;
 }
 
 void SMCProcessorAMD::updatePackageTemp(){
