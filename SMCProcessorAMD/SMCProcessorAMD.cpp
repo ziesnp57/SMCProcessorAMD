@@ -333,7 +333,7 @@ void SMCProcessorAMD::updateClockSpeed(){
     
     float clock = curCpuFid / curCpuDfsId * 200.0f;
 
-    IOLog("SMCProcessorAMD::updateClockSpeed: i am CPU %hhu, physical %hhu, %llu(%u,%.2f)\n", package, physical, msr_value_buf, clock, clock);
+    IOLog("SMCProcessorAMD::updateClockSpeed: i am CPU %hhu, physical %hhu, %llu(%llu)\n", package, physical, msr_value_buf, clock);
 
     MSR_HARDWARE_PSTATE_STATUS_perCore[physical] = clock;
 }
