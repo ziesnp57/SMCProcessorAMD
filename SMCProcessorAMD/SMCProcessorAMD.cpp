@@ -51,7 +51,7 @@ bool SMCProcessorAMD::setupKeysVsmc(){
     suc &= VirtualSMCAPI::addKey(KeyTCxp(0), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempPackage(this, 0)));
 
     for(int core = 0; core <= this->totalNumberOfPhysicalCores; core++){
-        VirtualSMCAPI::addKey(KeyTCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, core)));
+        VirtualSMCAPI::addKey(KeyTCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, MSR_HARDWARE_PSTATE_STATUS_perCore[core]));
     }
     VirtualSMCAPI::addKey(KeyTGxD(0), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
     VirtualSMCAPI::addKey(KeyTGxP(0), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
@@ -331,7 +331,7 @@ void SMCProcessorAMD::updateClockSpeed(){
     float curCpuDfsId = (float)((eax >> 8) & 0x3f);
     float curCpuFid = (float)(eax & 0xff);
     
-    float clock = curCpuFid / curCpuDfsId * 200.0f;
+    float clock = curCpuFid / curCpuDfsId * 2.0f;
 
     IOLog("SMCProcessorAMD::updateClockSpeed: i am CPU %hhu, physical %hhu, %llu(%llu)\n", package, physical, msr_value_buf, clock);
 
