@@ -175,6 +175,7 @@ private:
     
     float tempOffset = 0;
     
+    int (*wrmsr_carefully)(uint32_t, uint32_t, uint32_t) {nullptr};
     bool setupKeysVsmc();
     bool getPCIService();
     

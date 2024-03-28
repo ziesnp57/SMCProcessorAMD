@@ -277,12 +277,6 @@ bool SMCProcessorAMD::getCPBState(){
 }
 
 bool SMCProcessorAMD::write_msr(uint32_t addr, uint64_t value){
-    if(wrmsr_carefully){
-        uint32_t lo = value & 0xffffffff;
-        uint32_t hi = value >> 32;
-        return (*wrmsr_carefully)(addr, lo, hi) == 0;
-    }
-    
     //Fall back with unsafe method
     wrmsr64(addr, value);
     
@@ -325,7 +319,7 @@ void SMCProcessorAMD::updateClockSpeed(){
     uint64_t msr_value_buf = 0;
     bool err = !read_msr(kMSR_HARDWARE_PSTATE_STATUS, &msr_value_buf);
     if(err) IOLog("SMCProcessorAMD::updateClockSpeed: failed somewhere");
-            
+
     IOLog("SMCProcessorAMD::updateClockSpeed: i am CPU %hhu, physical %hhu, %llu\n", package, physical, msr_value_buf);
             
     MSR_HARDWARE_PSTATE_STATUS_perCore[physical] = msr_value_buf;
