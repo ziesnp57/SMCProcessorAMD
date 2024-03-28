@@ -238,8 +238,56 @@ bool SMCProcessorAMD::start(IOService *provider){
     
     IOLog("SMCProcessorAMD::start registering VirtualSMC keys...\n");
     setupKeysVsmc();
+    setCPBState(false);
     
     return success;
+}
+
+void SMCProcessorAMD::setCPBState(bool enabled){
+    IOLog("AMDCPUSupport::setCPBState enabled is %s\n", enabled?"true":"false");
+
+    if(!cpbSupported) return;
+    
+    uint64_t hwConfig;
+    if(!read_msr(kHWCR, &hwConfig))
+        panic("AMDCPUSupport::setCPBState: wtf?");
+    
+    if(enabled){
+        hwConfig &= ~(1 << 25);
+    } else {
+        hwConfig |= (1 << 25);
+    }
+    
+    //A bit hacky but at least works for now.
+    void* args[] = {this, &hwConfig};
+    
+    mp_rendezvous(nullptr, [](void *obj) {
+        auto v = static_cast<uint64_t*>(*((uint64_t**)obj+1));
+        auto provider = static_cast<SMCProcessorAMD*>(obj);
+        provider->write_msr(kHWCR, *v);
+    }, nullptr, args);
+}
+
+bool SMCProcessorAMD::getCPBState(){
+    uint64_t hwConfig;
+    if(!read_msr(kHWCR, &hwConfig))
+        panic("AMDCPUSupport::start: wtf?");
+    
+    return !((hwConfig >> 25) & 0x1);
+}
+
+bool SMCProcessorAMD::write_msr(uint32_t addr, uint64_t value){
+    if(wrmsr_carefully){
+        uint32_t lo = value & 0xffffffff;
+        uint32_t hi = value >> 32;
+        return (*wrmsr_carefully)(addr, lo, hi) == 0;
+    }
+    
+    //Fall back with unsafe method
+    wrmsr64(addr, value);
+    
+    //If failed, we've already panic and starting reboot. So just return true.
+    return true;
 }
 
 void SMCProcessorAMD::stop(IOService *provider){
@@ -278,7 +326,7 @@ void SMCProcessorAMD::updateClockSpeed(){
     bool err = !read_msr(kMSR_HARDWARE_PSTATE_STATUS, &msr_value_buf);
     if(err) IOLog("SMCProcessorAMD::updateClockSpeed: failed somewhere");
             
-//    IOLog("SMCProcessorAMD::updateClockSpeed: i am CPU %hhu, physical %hhu\n", package, physical);
+    IOLog("SMCProcessorAMD::updateClockSpeed: i am CPU %hhu, physical %hhu, %d\n", package, physical, msr_value_buf);
             
     MSR_HARDWARE_PSTATE_STATUS_perCore[physical] = msr_value_buf;
 }

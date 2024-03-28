@@ -126,7 +126,10 @@ public:
      *  A simple wrapper for the kernel function readmsr_carefully.
      */
     bool read_msr(uint32_t addr, uint64_t *value);
-    
+    bool write_msr(uint32_t addr, uint64_t value);
+    void setCPBState(bool enabled);
+    bool getCPBState();
+      
     void updateClockSpeed();
     void updatePackageTemp();
     void updatePackageEnergy();
