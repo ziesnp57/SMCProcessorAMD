@@ -52,9 +52,9 @@ bool SMCProcessorAMD::setupKeysVsmc(){
 
     for(int core = 0; core <= this->totalNumberOfPhysicalCores; core++){
         VirtualSMCAPI::addKey(KeyTCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new ClockCore(this, core)));
-        core++;
-        VirtualSMCAPI::addKey(KeyTCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, core)));
     }
+    core++;
+    VirtualSMCAPI::addKey(KeyTCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, core)));
     VirtualSMCAPI::addKey(KeyTGxD(0), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
     VirtualSMCAPI::addKey(KeyTGxP(0), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
 
