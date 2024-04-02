@@ -53,7 +53,7 @@ bool SMCProcessorAMD::setupKeysVsmc(){
     // 只有第一个核心是真正的CPU温度，其它的全是频率(GHz *10，比如3.3Ghz显示的是33）
     for(int core = 0; core <= this->totalNumberOfPhysicalCores; core++){
        if (core==0) {
-          VirtualSMCAPI::addKey(KeyTCxc(this->totalNumberOfPhysicalCores + 1), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
+          VirtualSMCAPI::addKey(KeyTCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, core)));
        } else {
           VirtualSMCAPI::addKey(KeyTCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new ClockCore(this, core)));
        }
