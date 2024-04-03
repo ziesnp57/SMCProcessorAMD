@@ -1,4 +1,5 @@
 #include "SMCProcessorAMD.hpp"
+#include <Headers/kern_devinfo.hpp>
 
 
 OSDefineMetaClassAndStructors(SMCProcessorAMD, IOService);
@@ -50,13 +51,25 @@ bool SMCProcessorAMD::setupKeysVsmc(){
     suc &= VirtualSMCAPI::addKey(KeyTCxT(0), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempPackage(this, 0)));
     suc &= VirtualSMCAPI::addKey(KeyTCxp(0), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempPackage(this, 0)));
 
+    size_t coreOffset = 0;
+    auto model = BaseDeviceInfo::get().modelIdentifier;
+    auto isdigit = [](auto l) { return l >= '0' && l <= '9'; };
+    bool isMob = !strncmp(model, "MacBook", strlen("MacBook"));
+
     // 只有第一个核心是真正的CPU温度，其它的全是频率(GHz *10，比如3.3Ghz显示的是33）
     for(int core = 0; core <= this->totalNumberOfPhysicalCores; core++){
-       if (core==0) {
-          VirtualSMCAPI::addKey(KeyTCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, core)));
-       } else {
-          VirtualSMCAPI::addKey(KeyTCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new ClockCore(this, core)));
-       }
+        if (isMob) {
+            if (core<4) {
+//                VirtualSMCAPI::addKey(KeyTCxC(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new ClockCore(this, core)));
+            }
+        } else {
+            if (core==0) {
+                VirtualSMCAPI::addKey(KeyTCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, core)));
+            } else {
+                VirtualSMCAPI::addKey(KeyTCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new ClockCore(this, core)));
+            }
+        }
+        VirtualSMCAPI::addKey(KeyPCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp96, new ClockCore(this, core)));
     }
 
     VirtualSMCAPI::addKey(KeyTGxD(0), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
@@ -244,8 +257,13 @@ bool SMCProcessorAMD::start(IOService *provider){
     
     IOLog("SMCProcessorAMD::start registering VirtualSMC keys...\n");
     setupKeysVsmc();
-    setCPBState(false);
-    
+    // 初始化时是否关闭CPB
+    if(propertyExists("CPBStatus")) {
+        OSBoolean * customValue = OSDynamicCast(OSBoolean, getProperty("CPBStatus"));
+        if (customValue != NULL && customValue->getValue() == FALSE) {
+            setCPBState(FALSE);
+        }
+    }
     return success;
 }
 

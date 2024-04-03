@@ -24,6 +24,8 @@
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+			<key>CPBStatus</key>
+			<true/>
 			<key>IOClass</key>
 			<string>$(PRODUCT_NAME)</string>
 			<key>IOMatchCategory</key>
