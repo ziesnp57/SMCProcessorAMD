@@ -96,7 +96,7 @@ class SMCProcessorAMD : public IOService {
     /**
      *  Supported SMC keys
      */
-    static constexpr SMC_KEY KeyPCPR = SMC_MAKE_IDENTIFIER('P','C','P','R');
+    static constexpr SMC_KEY KeyPCPR = SMC_MAKE_IDENTIFIER('P','C', 'P','R');
     static constexpr SMC_KEY KeyPCPT = SMC_MAKE_IDENTIFIER('P','C','P','T');
     static constexpr SMC_KEY KeyPCTR = SMC_MAKE_IDENTIFIER('P','C','T','R');
 
