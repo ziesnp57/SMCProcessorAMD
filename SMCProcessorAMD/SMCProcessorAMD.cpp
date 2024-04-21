@@ -76,8 +76,8 @@ bool SMCProcessorAMD::setupKeysVsmc(){
     VirtualSMCAPI::addKey(KeyTGDD, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
     // 核显温度
     VirtualSMCAPI::addKey(KeyTCGC, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
-
-
+    
+    VirtualSMCAPI::addKey(KeyVD0R, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
 
     if(!suc){
         IOLog("SMCProcessorAMD::setupKeysVsmc: VirtualSMCAPI::addKey returned false. \n");
