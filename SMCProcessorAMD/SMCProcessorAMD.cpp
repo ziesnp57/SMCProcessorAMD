@@ -85,6 +85,8 @@ bool SMCProcessorAMD::setupKeysVsmc(){
 
     VirtualSMCAPI::addKey(KeyTW0P, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
     
+    VirtualSMCAPI::addKey(KeyF0Ac, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
+    
     if(!suc){
         IOLog("SMCProcessorAMD::setupKeysVsmc: VirtualSMCAPI::addKey returned false. \n");
     }
