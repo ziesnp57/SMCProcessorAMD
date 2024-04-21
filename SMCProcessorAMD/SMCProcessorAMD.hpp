@@ -122,8 +122,8 @@ class SMCProcessorAMD : public IOService {
     static constexpr SMC_KEY KeyVD0R = SMC_MAKE_IDENTIFIER('V', 'D', '0', 'R');
     static constexpr SMC_KEY KeyID0R = SMC_MAKE_IDENTIFIER('I', 'D', '0', 'R');
     static constexpr SMC_KEY KeyTH0B = SMC_MAKE_IDENTIFIER('T', 'H', '0', 'B');
-
     static constexpr SMC_KEY KeyTW0P = SMC_MAKE_IDENTIFIER('T', 'W', '0', 'P');
+    static constexpr SMC_KEY KeyF0Ac = SMC_MAKE_IDENTIFIER('F', '0', 'A', 'c');
 
 public:
     virtual bool init(OSDictionary *dictionary = 0) override;
