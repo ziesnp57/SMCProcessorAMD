@@ -99,30 +99,26 @@ class SMCProcessorAMD : public IOService {
     static constexpr SMC_KEY KeyPCPR = SMC_MAKE_IDENTIFIER('P','C','P','R');
     static constexpr SMC_KEY KeyPCPT = SMC_MAKE_IDENTIFIER('P','C','P','T');
     static constexpr SMC_KEY KeyPCTR = SMC_MAKE_IDENTIFIER('P','C','T','R');
-    static constexpr SMC_KEY KeyTCxD(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'D'); }
-    static constexpr SMC_KEY KeyTCxE(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'E'); }
-    static constexpr SMC_KEY KeyTCxF(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'F'); }
-    static constexpr SMC_KEY KeyTCxG(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'G'); }
-    static constexpr SMC_KEY KeyTCxJ(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'J'); }
-    static constexpr SMC_KEY KeyTCxH(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'H'); }
-    static constexpr SMC_KEY KeyTCxP(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'P'); }
-    static constexpr SMC_KEY KeyTCxT(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'T'); }
-    static constexpr SMC_KEY KeyTCxp(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'p'); }
-    static constexpr SMC_KEY KeyPCxc(size_t i) { return SMC_MAKE_IDENTIFIER('P','C',KeyIndexes[i],'p'); }
-    static constexpr SMC_KEY KeyTCxc(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'c'); }
-    static constexpr SMC_KEY KeyTCxC(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'C'); }
-	static constexpr SMC_KEY KeyVCxC(size_t i) { return SMC_MAKE_IDENTIFIER('V','C',KeyIndexes[i],'C'); }
 
-    static constexpr SMC_KEY KeyTGxP(size_t i) { return SMC_MAKE_IDENTIFIER('T', 'G', KeyIndexes[i], 'P'); }
-    static constexpr SMC_KEY KeyTGxD(size_t i) { return SMC_MAKE_IDENTIFIER('T', 'G', KeyIndexes[i], 'D'); }
-    static constexpr SMC_KEY KeyTGxp(size_t i) { return SMC_MAKE_IDENTIFIER('T', 'G', KeyIndexes[i], 'p'); }
-    static constexpr SMC_KEY KeyTGxd(size_t i) { return SMC_MAKE_IDENTIFIER('T', 'G', KeyIndexes[i], 'd'); }
+    static constexpr SMC_KEY KeyTp01 = SMC_MAKE_IDENTIFIER('T','p','0','1');
+    static constexpr SMC_KEY KeyTp05 = SMC_MAKE_IDENTIFIER('T','p','0','5');
+    static constexpr SMC_KEY KeyTp09 = SMC_MAKE_IDENTIFIER('T','p','0','9');
+    static constexpr SMC_KEY KeyTp0D = SMC_MAKE_IDENTIFIER('T','p','0','D');
+    static constexpr SMC_KEY KeyTp0b = SMC_MAKE_IDENTIFIER('T','p','0','b');
+    static constexpr SMC_KEY KeyTp1f = SMC_MAKE_IDENTIFIER('T','p','0','f');
+    static constexpr SMC_KEY KeyTp0j = SMC_MAKE_IDENTIFIER('T','p','0','j');
+
+
     static constexpr SMC_KEY KeyTGDD = SMC_MAKE_IDENTIFIER('T', 'G', 'D', 'D');
     static constexpr SMC_KEY KeyTCGC = SMC_MAKE_IDENTIFIER('T', 'C', 'G', 'C');
     static constexpr SMC_KEY KeyVD0R = SMC_MAKE_IDENTIFIER('V', 'D', '0', 'R');
     static constexpr SMC_KEY KeyID0R = SMC_MAKE_IDENTIFIER('I', 'D', '0', 'R');
     static constexpr SMC_KEY KeyTH0B = SMC_MAKE_IDENTIFIER('T', 'H', '0', 'B');
+
+
     static constexpr SMC_KEY KeyTW0P = SMC_MAKE_IDENTIFIER('T', 'W', '0', 'P');
+
+    // 分扇转速
     static constexpr SMC_KEY KeyF0Ac = SMC_MAKE_IDENTIFIER('F', '0', 'A', 'c');
 
 public:
