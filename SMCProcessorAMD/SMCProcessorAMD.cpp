@@ -1,41 +1,47 @@
 #include "SMCProcessorAMD.hpp"
 #include <Headers/kern_devinfo.hpp>
 
-
+// 定义元类和结构体
 OSDefineMetaClassAndStructors(SMCProcessorAMD, IOService);
 
+// TCTL偏移表长度
 #define TCTL_OFFSET_TABLE_LEN 6
+// TCTL偏移表
 static constexpr const struct tctl_offset tctl_offset_table[] = {
-    { 0x17, "AMD Ryzen 5 1600X", 20 },
-    { 0x17, "AMD Ryzen 7 1700X", 20 },
-    { 0x17, "AMD Ryzen 7 1800X", 20 },
-    { 0x17, "AMD Ryzen 7 2700X", 10 },
-    { 0x17, "AMD Ryzen Threadripper 19", 27 }, /* 19{00,20,50}X */
-    { 0x17, "AMD Ryzen Threadripper 29", 27 }, /* 29{20,50,70,90}[W]X */
+        { 0x17, "AMD Ryzen 5 1600X", 20 },
+        { 0x17, "AMD Ryzen 7 1700X", 20 },
+        { 0x17, "AMD Ryzen 7 1800X", 20 },
+        { 0x17, "AMD Ryzen 7 2700X", 10 },
+        { 0x17, "AMD Ryzen Threadripper 19", 27 }, /* 19{00,20,50}X */
+        { 0x17, "AMD Ryzen Threadripper 29", 27 }, /* 29{20,50,70,90}[W]X */
 };
 
-
+// 调试开关
 bool ADDPR(debugEnabled) = false;
+// 调试打印延迟
 uint32_t ADDPR(debugPrintDelay) = 0;
 
+// 初始化函数
 bool SMCProcessorAMD::init(OSDictionary *dictionary){
-    
+
     IOLog("SMCProcessorAMD v%s, init\n", xStringify(MODULE_VERSION));
-    
+
     return IOService::init(dictionary);
 }
 
+// 释放函数
 void SMCProcessorAMD::free(){
     IOService::free();
 }
 
+// 设置VSMC键值
 bool SMCProcessorAMD::setupKeysVsmc(){
-    
+
     vsmcNotifier = VirtualSMCAPI::registerHandler(vsmcNotificationHandler, this);
-    
+
     bool suc = true;
-   
-    //Read watt cpu
+
+    // 读取CPU瓦特数
     suc &= VirtualSMCAPI::addKey(KeyPCPR, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp96, new EnergyPackage(this, 0)));
     suc &= VirtualSMCAPI::addKey(KeyPCPT, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp96, new EnergyPackage(this, 0)));
     suc &= VirtualSMCAPI::addKey(KeyPCTR, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp96, new EnergyPackage(this, 0)));
@@ -52,6 +58,15 @@ bool SMCProcessorAMD::setupKeysVsmc(){
     suc &= VirtualSMCAPI::addKey(KeyTCxp(0), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempPackage(this, 0)));
 //    suc &= VirtualSMCAPI::addKey(KeyTCxT(0), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempPackage(this, 0)));
 
+    // cpu温度
+    VirtualSMCAPI::addKey(KeyTp01, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
+    VirtualSMCAPI::addKey(KeyTp05, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
+    VirtualSMCAPI::addKey(KeyTp09, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
+    VirtualSMCAPI::addKey(KeyTp0D, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
+    VirtualSMCAPI::addKey(KeyTp0b, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
+    VirtualSMCAPI::addKey(KeyTp0f, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
+    VirtualSMCAPI::addKey(KeyTp0j, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
+
     size_t coreOffset = 0;
     auto model = BaseDeviceInfo::get().modelIdentifier;
     auto isdigit = [](auto l) { return l >= '0' && l <= '8'; };
@@ -63,8 +78,7 @@ bool SMCProcessorAMD::setupKeysVsmc(){
 //            VirtualSMCAPI::addKey(KeyTCxC(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, core)));
 //            VirtualSMCAPI::addKey(KeyTCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, core)));
 //        } else {
-            VirtualSMCAPI::addKey(KeyTCxC(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new ClockCore(this, core)));
-            VirtualSMCAPI::addKey(KeyTCxc(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new ClockCore(this, core)));
+           // VirtualSMCAPI::addKey(KeyTCxC(core), vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new ClockCore(this, core)));
 //        }
     }
 
@@ -75,13 +89,15 @@ bool SMCProcessorAMD::setupKeysVsmc(){
 
 
     VirtualSMCAPI::addKey(KeyID0R, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
-    
+
     VirtualSMCAPI::addKey(KeyTH0B, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
 
+    // 电压
     VirtualSMCAPI::addKey(KeyTW0P, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
-    
+
+    // 分扇监控
     VirtualSMCAPI::addKey(KeyF0Ac, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
-    
+
     if(!suc){
         IOLog("SMCProcessorAMD::setupKeysVsmc: VirtualSMCAPI::addKey returned false. \n");
     }
@@ -90,6 +106,7 @@ bool SMCProcessorAMD::setupKeysVsmc(){
     return suc;
 }
 
+// VSMC通知处理器
 bool SMCProcessorAMD::vsmcNotificationHandler(void *sensors, void *refCon, IOService *vsmc, IONotifier *notifier) {
     if (sensors && vsmc) {
         IOLog("SMCProcessorAMD: got vsmc notification\n");
@@ -110,46 +127,48 @@ bool SMCProcessorAMD::vsmcNotificationHandler(void *sensors, void *refCon, IOSer
 }
 
 
+// 获取PCI服务
 bool SMCProcessorAMD::getPCIService(){
-    
+
 
     OSDictionary *matching_dict = serviceMatching("IOPCIDevice");
     if(!matching_dict){
         IOLog("SMCProcessorAMD::getPCIService: serviceMatching unable to generate matching dictonary.\n");
         return false;
     }
-    
-    //Wait for PCI services to init.
+
+    // 等待PCI服务初始化
     waitForMatchingService(matching_dict);
-    
+
     OSIterator *service_iter = getMatchingServices(matching_dict);
     IOPCIDevice *service = 0;
-    
+
     if(!service_iter){
         IOLog("SMCProcessorAMD::getPCIService: unable to find a matching IOPCIDevice.\n");
         return false;
     }
- 
+
     while (true){
         OSObject *obj = service_iter->getNextObject();
         if(!obj) break;
-        
+
         service = OSDynamicCast(IOPCIDevice, obj);
         break;
     }
-    
+
     if(!service){
         IOLog("SMCProcessorAMD::getPCIService: unable to get IOPCIDevice on host system.\n");
         return false;
     }
-    
+
     IOLog("SMCProcessorAMD::getPCIService: succeed!\n");
     fIOPCIDevice = service;
-    
+
     return true;
 }
 
 
+// 启动服务
 bool SMCProcessorAMD::start(IOService *provider){
     
     bool success = IOService::start(provider);
