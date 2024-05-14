@@ -70,7 +70,7 @@ bool SMCProcessorAMD::setupKeysVsmc(){
     size_t coreOffset = 0;
     auto model = BaseDeviceInfo::get().modelIdentifier;
     auto isdigit = [](auto l) { return l >= '0' && l <= '8'; };
-    bool isMob = !strncmp(model, "MacBook Pro", strlen("MacBook Pro"));
+    bool isMob = !strncmp(model, "MacBook", strlen("MacBook"));
 
     // 只有第一个核心是真正的CPU温度，其它的全是频率(GHz *10，比如3.3Ghz显示的是33）
     for(int core = 0; core <= this->totalNumberOfPhysicalCores; core++){
