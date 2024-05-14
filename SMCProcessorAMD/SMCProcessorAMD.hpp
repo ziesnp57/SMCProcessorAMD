@@ -113,12 +113,8 @@ class SMCProcessorAMD : public IOService {
     static constexpr SMC_KEY KeyTCxC(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'C'); }
 	static constexpr SMC_KEY KeyVCxC(size_t i) { return SMC_MAKE_IDENTIFIER('V','C',KeyIndexes[i],'C'); }
 
-    static constexpr SMC_KEY KeyTGxP(size_t i) { return SMC_MAKE_IDENTIFIER('T', 'G', KeyIndexes[i], 'P'); }
-    static constexpr SMC_KEY KeyTGxD(size_t i) { return SMC_MAKE_IDENTIFIER('T', 'G', KeyIndexes[i], 'D'); }
-    static constexpr SMC_KEY KeyTGxp(size_t i) { return SMC_MAKE_IDENTIFIER('T', 'G', KeyIndexes[i], 'p'); }
-    static constexpr SMC_KEY KeyTGxd(size_t i) { return SMC_MAKE_IDENTIFIER('T', 'G', KeyIndexes[i], 'd'); }
+
     static constexpr SMC_KEY KeyTGDD = SMC_MAKE_IDENTIFIER('T', 'G', 'D', 'D');
-    static constexpr SMC_KEY KeyTCGC = SMC_MAKE_IDENTIFIER('T', 'C', 'G', 'C');
     static constexpr SMC_KEY KeyVD0R = SMC_MAKE_IDENTIFIER('V', 'D', '0', 'R');
     static constexpr SMC_KEY KeyID0R = SMC_MAKE_IDENTIFIER('I', 'D', '0', 'R');
     static constexpr SMC_KEY KeyTH0B = SMC_MAKE_IDENTIFIER('T', 'H', '0', 'B');
