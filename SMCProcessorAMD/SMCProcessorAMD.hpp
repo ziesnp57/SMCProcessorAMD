@@ -74,6 +74,7 @@ class SMCProcessorAMD : public IOService {
     static constexpr uint32_t k17H_M01H_SVI = 0x0005A000;
     static constexpr uint32_t kF17H_M01H_THM_TCON_CUR_TMP = 0x00059800;
     static constexpr uint32_t kF17H_M70H_CCD1_TEMP = 0x00059954;
+    static constexpr uint32_t kF17H_M61H_CCD1_TEMP = 0x00059b08;
     static constexpr uint32_t kF17H_TEMP_OFFSET_FLAG = 0x80000;
     static constexpr uint8_t kFAMILY_17H_PCI_CONTROL_REGISTER = 0x60;
     static constexpr uint32_t kHWCR = 0xC0010015;
@@ -119,6 +120,13 @@ class SMCProcessorAMD : public IOService {
     static constexpr SMC_KEY KeyTGxd(size_t i) { return SMC_MAKE_IDENTIFIER('T', 'G', KeyIndexes[i], 'd'); }
     static constexpr SMC_KEY KeyTGDD = SMC_MAKE_IDENTIFIER('T', 'G', 'D', 'D');
     static constexpr SMC_KEY KeyTCGC = SMC_MAKE_IDENTIFIER('T', 'C', 'G', 'C');
+
+
+    //
+    static constexpr SMC_KEY KeyTH0V = SMC_MAKE_IDENTIFIER('T','H','0','V');
+    static constexpr SMC_KEY KeyTW0P = SMC_MAKE_IDENTIFIER('T','W','0','P');
+    static constexpr SMC_KEY KeyF0Ac = SMC_MAKE_IDENTIFIER('F','0','A','c');
+    static constexpr SMC_KEY KeyF1Ac = SMC_MAKE_IDENTIFIER('F','1','A','c');
     
 public:
     virtual bool init(OSDictionary *dictionary = 0) override;
