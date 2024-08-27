@@ -77,6 +77,15 @@ bool SMCProcessorAMD::setupKeysVsmc(){
     // 核显温度
     VirtualSMCAPI::addKey(KeyTCGC, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
 
+    // 磁盘温度
+    VirtualSMCAPI::addKey(KeyTH0V, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
+
+    //
+    VirtualSMCAPI::addKey(KeyTW0P, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempPackage(this, 0)));
+
+    // 风扇
+    VirtualSMCAPI::addKey(KeyF0Ac, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempPackage(this, 0)));
+    VirtualSMCAPI::addKey(KeyF1Ac, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempPackage(this, 0)));
 
 
     if(!suc){
