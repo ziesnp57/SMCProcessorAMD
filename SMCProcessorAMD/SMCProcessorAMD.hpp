@@ -106,17 +106,23 @@ class SMCProcessorAMD : public IOService {
 
     static constexpr SMC_KEY KeyTCxD(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'D'); }
     static constexpr SMC_KEY KeyTCxP(size_t i) { return SMC_MAKE_IDENTIFIER('T','C',KeyIndexes[i],'P'); }
-    static constexpr SMC_KEY KeyTCDD = SMC_MAKE_IDENTIFIER('T','C','D','D');
-
+    
     static constexpr SMC_KEY KeyTGxP(size_t i) { return SMC_MAKE_IDENTIFIER('T', 'G', KeyIndexes[i], 'P'); }
     static constexpr SMC_KEY KeyTGxD(size_t i) { return SMC_MAKE_IDENTIFIER('T', 'G', KeyIndexes[i], 'D'); }
     static constexpr SMC_KEY KeyTGDD = SMC_MAKE_IDENTIFIER('T', 'G', 'D', 'D');
 
     //
-    static constexpr SMC_KEY KeyTH0V = SMC_MAKE_IDENTIFIER('T','H','0','V');
+    static constexpr SMC_KEY KeyTH0a = SMC_MAKE_IDENTIFIER('T','H','0','a');
     static constexpr SMC_KEY KeyTW0P = SMC_MAKE_IDENTIFIER('T','W','0','P');
     static constexpr SMC_KEY KeyF0Ac = SMC_MAKE_IDENTIFIER('F','0','A','c');
     static constexpr SMC_KEY KeyF1Ac = SMC_MAKE_IDENTIFIER('F','1','A','c');
+
+
+
+    static constexpr SMC_KEY KeyTh0N = SMC_MAKE_IDENTIFIER('T','h','0','N');
+
+
+    static constexpr SMC_KEY KeyTBXT = SMC_MAKE_IDENTIFIER('T','B','X','T');
     
 public:
     virtual bool init(OSDictionary *dictionary = 0) override;
