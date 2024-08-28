@@ -112,7 +112,11 @@ class SMCProcessorAMD : public IOService {
     static constexpr SMC_KEY KeyTGDD = SMC_MAKE_IDENTIFIER('T', 'G', 'D', 'D');
 
     //
+    static constexpr SMC_KEY KeyTH0o = SMC_MAKE_IDENTIFIER('T','H','0','o');
+    static constexpr SMC_KEY KeyTH1o = SMC_MAKE_IDENTIFIER('T','H','1','o');
     static constexpr SMC_KEY KeyTH0a = SMC_MAKE_IDENTIFIER('T','H','0','a');
+
+
     static constexpr SMC_KEY KeyTW0P = SMC_MAKE_IDENTIFIER('T','W','0','P');
     static constexpr SMC_KEY KeyF0Ac = SMC_MAKE_IDENTIFIER('F','0','A','c');
     static constexpr SMC_KEY KeyF1Ac = SMC_MAKE_IDENTIFIER('F','1','A','c');
