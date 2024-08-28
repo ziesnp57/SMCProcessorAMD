@@ -35,6 +35,11 @@ bool SMCProcessorAMD::setupKeysVsmc(){
     
     bool suc = true;
    
+    size_t coreOffset = 0;
+    auto model = BaseDeviceInfo::get().modelIdentifier;
+    auto isdigit = [](auto l) { return l >= '0' && l <= '9'; };
+    bool isMob = !strncmp(model, "MacBook", strlen("MacBook"));
+
     //cpu功耗
     suc &= VirtualSMCAPI::addKey(KeyPCPR, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp96, new EnergyPackage(this, 0)));
     suc &= VirtualSMCAPI::addKey(KeyPCPT, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp96, new EnergyPackage(this, 0)));
