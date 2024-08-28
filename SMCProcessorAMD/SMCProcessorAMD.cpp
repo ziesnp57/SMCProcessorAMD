@@ -58,9 +58,11 @@ bool SMCProcessorAMD::setupKeysVsmc(){
 
     // 磁盘温度
     VirtualSMCAPI::addKey(KeyTH0a, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
+    VirtualSMCAPI::addKey(KeyTH0o, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
+    VirtualSMCAPI::addKey(KeyTH1o, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
 
     //wifi温度
-    VirtualSMCAPI::addKey(KeyTW0P, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempPackage(this, 0)));
+    VirtualSMCAPI::addKey(KeyTW0P, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
 
     // 风扇转速
     VirtualSMCAPI::addKey(KeyF0Ac, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempPackage(this, 0)));
@@ -68,10 +70,10 @@ bool SMCProcessorAMD::setupKeysVsmc(){
 
 
     //
-    VirtualSMCAPI::addKey(KeyTh0N, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempPackage(this, 0)));
+    VirtualSMCAPI::addKey(KeyTh0N, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
 
     //电池温度
-    VirtualSMCAPI::addKey(KeyTBXT, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempPackage(this, 0)));
+    VirtualSMCAPI::addKey(KeyTBXT, vsmcPlugin.data, VirtualSMCAPI::valueWithSp(0, SmcKeyTypeSp78, new TempCore(this, 0)));
 
     if(!suc){
         IOLog("SMCProcessorAMD::setupKeysVsmc: VirtualSMCAPI::addKey returned false. \n");
